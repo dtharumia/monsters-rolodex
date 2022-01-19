@@ -10,7 +10,8 @@ class App extends Component {
 
     this.state = {
       monsters: [],
-      searchField: ''
+      searchField: '',
+      filteredMonsters: []
     };
 
   }
@@ -18,25 +19,33 @@ class App extends Component {
   componentDidMount() {
     fetch("https://jsonplaceholder.typicode.com/users")
       .then((res) => res.json())
-      .then((users) => this.setState({ monsters: users }))
+      .then((users) => this.setState({ monsters: users, filteredMonsters: users }))
   }
 
   handleChange = (e) => {
     this.setState({ searchField: e.target.value })
   }
-
-  render() {
+  filterByName = () => {
     const { monsters, searchField } = this.state;
-    const fileteredMonsters = monsters.filter(monster =>
+    const filteredMonsters = monsters.filter(monster =>
       monster.name.toLowerCase().includes(searchField.toLowerCase())
     );
+    this.setState({ filteredMonsters: filteredMonsters });
+  }
+
+  render() {
+    const { filteredMonsters, searchField } = this.state;
+    // const fileteredMonsters = monsters.filter(monster =>
+    //   monster.name.toLowerCase().includes(searchField.toLowerCase())
+    // );
     return (
       <div className="App" >
         <h1>Monsters Rolodex</h1>
         <SearchBox
           placeholder='search monsters'
           handleChange={this.handleChange} />
-        <CardList monsters={fileteredMonsters}></CardList>
+        <button onClick={() => this.filterByName()}>Enter text and then click to Filter</button>
+        <CardList monsters={filteredMonsters}></CardList>
       </div>
     )
   }
