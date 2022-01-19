@@ -23,7 +23,13 @@ class App extends Component {
   }
 
   handleChange = (e) => {
-    this.setState({ searchField: e.target.value })
+    
+    this.setState({ searchField: e.target.value },()=> {
+      if (this.state.searchField == "") {
+        console.log('running')
+        this.filterByName()
+      }
+    })
   }
   filterByName = () => {
     const { monsters, searchField } = this.state;
@@ -35,9 +41,7 @@ class App extends Component {
 
   render() {
     const { filteredMonsters, searchField } = this.state;
-    // const fileteredMonsters = monsters.filter(monster =>
-    //   monster.name.toLowerCase().includes(searchField.toLowerCase())
-    // );
+    
     return (
       <div className="App" >
         <h1>Monsters Rolodex</h1>
